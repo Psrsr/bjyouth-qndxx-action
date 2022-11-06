@@ -3,6 +3,8 @@ import base64
 import requests
 import ddddocr
 import time
+import platform    # For getting the operating system name
+import subprocess  # For executing a shell command
 from typing import Tuple
 from io import BytesIO
 from Crypto.PublicKey import RSA
@@ -93,6 +95,7 @@ class QnDxx(object):
         '''
         获取登录页面的验证码
         '''
+        ping('https://m.bjyouth.net/site/login')
         res = self.session.get(url=self.bjyouth_login_url, timeout=5)
         src = re.findall(r'<img id="verifyCode-image" src="(.+)" alt=".+">', res.text)[0]
         url = "https://m.bjyouth.net" + src
@@ -189,3 +192,18 @@ class QnDxx(object):
             return True
         else:
             raise Exception("打卡失败")
+
+
+def ping(host):
+    """
+    Returns True if host (str) responds to a ping request.
+    Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
+    """
+
+    # Option for the number of packets as a function of
+    param = '-n' if platform.system().lower()=='windows' else '-c'
+
+    # Building the command. Ex: "ping -c 1 google.com"
+    command = ['ping', param, '1', host]
+
+    return subprocess.call(command) == 0
