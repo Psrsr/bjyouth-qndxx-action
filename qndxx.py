@@ -95,7 +95,7 @@ class QnDxx(object):
         '''
         获取登录页面的验证码
         '''
-        ping('google.com')
+        ping('m.bjyouth.net')
         res = self.session.get(url=self.bjyouth_login_url, timeout=5)
         src = re.findall(r'<img id="verifyCode-image" src="(.+)" alt=".+">', res.text)[0]
         url = "https://m.bjyouth.net" + src
